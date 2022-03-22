@@ -20,6 +20,7 @@ class App extends React.Component{
     })
   }
 
+            // async because of axios
   getCityData = async (e) => {
     e.preventDefault();
     try {
@@ -73,7 +74,7 @@ class App extends React.Component{
 
           <ListGroup>
 
-        {this.state.cityData === "" ? undefined : <ListGroup.Item > City: {this.state.cityData.display_name} </ListGroup.Item> }
+        <ListGroup.Item > City: {this.state.cityData.display_name} </ListGroup.Item> 
         <ListGroup.Item>lat: {this.state.cityData.lat}</ListGroup.Item> 
         <ListGroup.Item> lon: {this.state.cityData.lon}</ListGroup.Item> 
         <ListGroup.Item> <img alt={this.state.cityData.display_name} src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10&size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}/></ListGroup.Item>
