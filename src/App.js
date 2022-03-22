@@ -58,7 +58,7 @@ class App extends React.Component{
             {this.state.cityData.display_name === "" ? undefined: <li> City: {this.state.cityData.display_name} </li> }
           
           <li> lat: {this.state.cityData.lat}</li>
-        <li>lon: {this.state.cityData.lon}</li>
+        <li>lon!: {this.state.cityData.lon}</li>
        
  
       </div>
