@@ -26,7 +26,7 @@ class App extends React.Component{
 
     // get the data from the API
     let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`);
-    this.setState({cityData: cityData.data[0]})
+    this.setState({cityData: cityData.data[0]})  // .data is built into axios
     console.log(this.state);
 
     } catch (error) {
@@ -34,7 +34,7 @@ class App extends React.Component{
       // console.log('error.response', error.response);
       this.setState({
         error: true,
-        errorMessage: `An error occurred: ${error.response.status}`
+        errorMessage: `Error! Please enter a valid city name. Error: ${error.response.status}`
       })
     }
 
@@ -76,7 +76,7 @@ class App extends React.Component{
         {this.state.cityData === "" ? undefined : <ListGroup.Item > City: {this.state.cityData.display_name} </ListGroup.Item> }
         <ListGroup.Item>lat: {this.state.cityData.lat}</ListGroup.Item> 
         <ListGroup.Item> lon: {this.state.cityData.lon}</ListGroup.Item> 
-        <ListGroup.Item> <img alt={this.state.cityData.display_name} src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=12&size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}/></ListGroup.Item>
+        <ListGroup.Item> <img alt={this.state.cityData.display_name} src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10&size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}/></ListGroup.Item>
        
         </ListGroup>
 
