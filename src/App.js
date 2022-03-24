@@ -2,15 +2,17 @@ import './App.css';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import { ListGroup, Button } from 'react-bootstrap';
+import {  Button, ListGroup } from 'react-bootstrap';
 import Weather from './Weather';
 class App extends React.Component{
   constructor(props){
   super(props);
     this.state={
       cityData: {},
+      weatherData:[],
       error: false,
       errorMessage: '',
+      city: '',
   
     }
   }
@@ -25,11 +27,17 @@ class App extends React.Component{
   getCityData = async (e) => {
     e.preventDefault();
     try {
+      // Get json data from our server
+      let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weather?searchQuery=seattle`);
+      this.setState({weatherData: weatherData.data})  // .data is built into axios
+      
+      // console.log(this.state);
+      // console.log(weatherData);
    
     // get the data from the API
     let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`);
     this.setState({cityData: cityData.data[0]})  // .data is built into axios
-    console.log(this.state);
+    // console.log(this.state);
 
     } catch (error) {
       // console.log('error', error);
@@ -44,10 +52,18 @@ class App extends React.Component{
 
   }
   
-  
   render (){
+    // console.log(this.state.weatherData);
+    console.log(this.state);
+
+    let currentWeatherDataDescription = this.state.weatherData.map((element, idx) => <li key={idx}>{element.description}</li>);
+    let currentWeatherDataDate = this.state.weatherData.map((element, idx) => <li key={idx}>{element.date}: </li>);
+
+
+
     // console.log(this.state.cityData.data[0].boundingbox[0],this.state.cityData.data[0].boundingbox[2] )
     // console.log(this.state);
+
     return (
     <>
       <header className="bg-dark text-white">
@@ -58,11 +74,9 @@ class App extends React.Component{
             <Button type="submit">Explore!</Button>
           </label>
         </form>
+        </header>
 
-        <Weather/>
-        
-      </header>
-      
+
       {this.state.error 
           ?
           <p>{this.state.errorMessage}</p>
@@ -76,16 +90,30 @@ class App extends React.Component{
         <ListGroup.Item>lat: {this.state.cityData.lat}</ListGroup.Item> 
         <ListGroup.Item> lon: {this.state.cityData.lon}</ListGroup.Item> 
         <ListGroup.Item> <img alt={this.state.cityData.display_name} src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10&size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}/></ListGroup.Item>
-       
+
+        {/* <ListGroupItem>{this.currentWeatherData}</ListGroupItem> */}
+      
         </ListGroup>
+      
+        // <ul>
+          
 
-
-
-
+        // </ul>
 
       } 
 
-      <footer></footer>
+
+      <footer>
+
+      <Weather
+            currentWeatherDataDescription={currentWeatherDataDescription}
+            currentWeatherDataDate={currentWeatherDataDate}
+            weatherData={this.state.weatherData}
+            error={this.state.error}
+            errorMessage={this.state.errorMessage}
+            getCityData={this.getCityData}
+            />
+      </footer>
     </>
     );
   }
