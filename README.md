@@ -24,6 +24,13 @@ WRRC LAB 07
   style="width: 50%"
  />
 
+WRRC LAB 08
+
+<img
+  src="public/Lab 08 WRRC.jpeg"
+  style="width: 50%"
+ />
+
 ## Architecture
 <!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
 
