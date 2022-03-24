@@ -3,7 +3,7 @@ import './weather.css';
 
 // import axios from 'axios';
 
-import { ListGroup, Container } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 
 
 class Weather extends React.Component {
@@ -51,12 +51,8 @@ return(
 
           :
     <Container className=''> 
-  <ListGroup>
+          {this.props.listItems}
 
-    {/* <ListGroup.Item > Date{this.props.weatherData}  </ListGroup.Item>  */}
-    <ListGroup.Item> {this.props.currentWeatherDataDate} </ListGroup.Item> 
-    <ListGroup.Item> {this.props.currentWeatherDataDescription} </ListGroup.Item> 
-  </ListGroup>
     </Container>
  }
   </>
