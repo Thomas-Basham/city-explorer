@@ -38,3 +38,4 @@ WRRC LAB 07
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
     Abdi Yussuf and I helped eachother through Lab 6
     Michelle 
+    Ella helped me with lab 7
