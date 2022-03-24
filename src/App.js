@@ -13,6 +13,7 @@ class App extends React.Component{
       error: false,
       errorMessage: '',
       city: '',
+      movieData: []
   
     }
   }
@@ -27,14 +28,18 @@ class App extends React.Component{
   getCityData = async (e) => {
     e.preventDefault();
     try {
-      // Get json data from our server
+      // Get the movie database json data from our server
+      let movieData = await axios.get(`${process.env.REACT_APP_SERVER}/movies?city_name=${this.state.city}`);
+      this.setState({movieData: movieData.data})  // .data is built into axios
+
+      // Get weatherbit json data from our server
       let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weatherbit?city_name=${this.state.city}`);
       this.setState({weatherData: weatherData.data})  // .data is built into axios
       
       // console.log(this.state);
       // console.log(weatherData);
    
-    // get the data from the API
+    // get the data from the location iq API
     let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`);
     this.setState({cityData: cityData.data[0]})  // .data is built into axios
     // console.log(this.state);
@@ -58,7 +63,8 @@ class App extends React.Component{
 
     let currentWeatherDataDescription = this.state.weatherData.map((element, idx) => <li key={idx}>{element.description}</li>);
     let currentWeatherDataDate = this.state.weatherData.map((element, idx) => <li key={idx}>{element.date}: </li>);
-
+    
+    let currentMovieData = this.state.movieData.map((element, idx) => <li key={idx}>{element.title} </li>);
 
 
     // console.log(this.state.cityData.data[0].boundingbox[0],this.state.cityData.data[0].boundingbox[2] )
@@ -91,7 +97,7 @@ class App extends React.Component{
         <ListGroup.Item> lon: {this.state.cityData.lon}</ListGroup.Item> 
         <ListGroup.Item> <img alt={this.state.cityData.display_name} src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10&size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}/></ListGroup.Item>
 
-        {/* <ListGroupItem>{this.currentWeatherData}</ListGroupItem> */}
+        <ListGroup.Item>{currentMovieData}</ListGroup.Item>
       
         </ListGroup>
       
