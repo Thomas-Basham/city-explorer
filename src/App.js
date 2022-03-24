@@ -44,7 +44,7 @@ class App extends React.Component{
       // console.log('error.response', error.response);
       this.setState({
         error: true,
-        errorMessage: `Error! Please enter a valid city name. Error: ${error.response.status}`
+        errorMessage: `Error! Error: ${error.response.status}`
       })
     }
 
