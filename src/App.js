@@ -2,7 +2,7 @@ import './App.css';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import {  Button, ListGroup } from 'react-bootstrap';
+import {  Button, Card, CardGroup, ListGroup } from 'react-bootstrap';
 import Weather from './Weather';
 class App extends React.Component{
   constructor(props){
@@ -31,6 +31,7 @@ class App extends React.Component{
       // Get the movie database json data from our server
       let movieData = await axios.get(`${process.env.REACT_APP_SERVER}/movies?city_name=${this.state.city}`);
       this.setState({movieData: movieData.data})  // .data is built into axios
+      console.log(movieData.data);
 
       // Get weatherbit json data from our server
       let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weatherbit?city_name=${this.state.city}`);
@@ -38,7 +39,7 @@ class App extends React.Component{
       
       // console.log(this.state);
       // console.log(weatherData);
-   
+
     // get the data from the location iq API
     let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`);
     this.setState({cityData: cityData.data[0]})  // .data is built into axios
@@ -61,11 +62,88 @@ class App extends React.Component{
     // console.log(this.state.weatherData);
     console.log(this.state);
 
-    let currentWeatherDataDescription = this.state.weatherData.map((element, idx) => <li key={idx}>{element.description}</li>);
-    let currentWeatherDataDate = this.state.weatherData.map((element, idx) => <li key={idx}>{element.date}: </li>);
-    
-    let currentMovieData = this.state.movieData.map((element, idx) => <li key={idx}>{element.title} </li>);
 
+
+    let listItems = this.state.weatherData.map(
+      (element, idx) => {
+          return (
+              <ul key={idx} 
+                  type="disc">
+                  <li 
+                  style={{ 
+                      fontWeight: 'bold', 
+                      color: 'red' }}
+                  >
+                      {element.date}
+                  </li>
+                  <li>{element.description}</li>
+              </ul>
+          )
+      }
+  )
+
+  let listItemsMovies = this.state.movieData.map(
+    (element, idx) => {
+        return (
+          <CardGroup>
+              <Card
+              key={idx} 
+          
+              >
+                <Card.Img variant="top" src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`}
+                />
+
+                <Card.Title >
+                  {element.title}
+                </Card.Title>
+
+                <Card.Text>
+                  {element.released}
+                </Card.Text>
+            </Card>
+          </CardGroup>
+        )
+    }
+)
+
+// let listItemsMovies = this.state.movieData.map(
+//   (element, idx) => {
+//       return (
+//         <Container>
+//             <ul
+//             className='overflow-auto'
+//             key={idx} 
+//             type="none"
+//             >
+//               <li> 
+//                 <img 
+//                 alt='alt'
+//                 src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`}
+//                 /> 
+//               </li>
+
+//               <li style={{ 
+//                 fontWeight: 'bold', 
+//                 color: 'black' }}
+//               >
+//                 {element.title}
+//               </li>
+
+//               <li>
+//                 {element.released}
+//               </li>
+//           </ul>
+//         </Container>
+//       )
+//   }
+// )
+
+
+    // let currentWeatherDataDescription = this.state.weatherData.map((element, idx) => <li key={idx}>{element.description}</li>);
+    // let currentWeatherDataDate = this.state.weatherData.map((element, idx) => <li key={idx}>{element.date}: </li>);
+    
+    // let currentMovieData = this.state.movieData.map((element, idx) => <li key={idx}>{element.data} </li>);
+    
 
     // console.log(this.state.cityData.data[0].boundingbox[0],this.state.cityData.data[0].boundingbox[2] )
     // console.log(this.state);
@@ -82,7 +160,6 @@ class App extends React.Component{
         </form>
         </header>
 
-
       {this.state.error 
           ?
           <p>{this.state.errorMessage}</p>
@@ -97,28 +174,25 @@ class App extends React.Component{
         <ListGroup.Item> lon: {this.state.cityData.lon}</ListGroup.Item> 
         <ListGroup.Item> <img alt={this.state.cityData.display_name} src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10&size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}/></ListGroup.Item>
 
-        <ListGroup.Item>{currentMovieData}</ListGroup.Item>
+        {/* <ListGroup.Item>{currentMovieData}</ListGroup.Item> */}
       
         </ListGroup>
-      
-        // <ul>
-          
-
-        // </ul>
-
       } 
-
+ 
 
       <footer>
-
       <Weather
-            currentWeatherDataDescription={currentWeatherDataDescription}
-            currentWeatherDataDate={currentWeatherDataDate}
+            // currentWeatherDataDescription={currentWeatherDataDescription}
+            // currentWeatherDataDate={currentWeatherDataDate}
+            listItems={listItems}
             weatherData={this.state.weatherData}
             error={this.state.error}
             errorMessage={this.state.errorMessage}
             getCityData={this.getCityData}
             />
+            {listItemsMovies}
+
+            
       </footer>
     </>
     );
