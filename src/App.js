@@ -28,7 +28,7 @@ class App extends React.Component{
     e.preventDefault();
     try {
       // Get json data from our server
-      let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weather?searchQuery=seattle`);
+      let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weatherbit?city_name=${this.state.city}`);
       this.setState({weatherData: weatherData.data})  // .data is built into axios
       
       // console.log(this.state);
