@@ -2,7 +2,7 @@ import './App.css';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import {  Button, Card, CardGroup, ListGroup } from 'react-bootstrap';
+import {  Button, Card, Row, Container, ListGroup, Col } from 'react-bootstrap';
 import Weather from './Weather';
 class App extends React.Component{
   constructor(props){
@@ -24,53 +24,42 @@ class App extends React.Component{
     })
   }
 
-            // async and await because of axios
+// Get our Data from Server API's
   getCityData = async (e) => {
     e.preventDefault();
     try {
       // Get the movie database json data from our server
       let movieData = await axios.get(`${process.env.REACT_APP_SERVER}/movies?city_name=${this.state.city}`);
       this.setState({movieData: movieData.data})  // .data is built into axios
-      console.log(movieData.data);
 
       // Get weatherbit json data from our server
       let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weatherbit?city_name=${this.state.city}`);
       this.setState({weatherData: weatherData.data})  // .data is built into axios
-      
-      // console.log(this.state);
-      // console.log(weatherData);
 
-    // get the data from the location iq API
-    let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`);
-    this.setState({cityData: cityData.data[0]})  // .data is built into axios
-    // console.log(this.state);
+      // get the data from the location iq API
+      let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`);
+      this.setState({cityData: cityData.data[0]})  // .data is built into axios
 
-    } catch (error) {
-      // console.log('error', error);
-      // console.log('error.response', error.response);
-      this.setState({
-        error: true,
-        errorMessage: `Error! Error: ${error.response.status}`
-      })
+      } catch (error) {
+        this.setState({
+          error: true,
+          errorMessage: `Error! Error: ${error.response.status}`
+        })
+      }
     }
-
-
-
-  }
   
   render (){
-    // console.log(this.state.weatherData);
-    console.log(this.state);
-
-
+    // console.log(this.state);
 
     let listItems = this.state.weatherData.map(
       (element, idx) => {
           return (
-              <ul key={idx} 
+            
+              <ul style={{listStyle: 'none', marginTop: '20px'}} key={idx} 
                   type="disc">
                   <li 
                   style={{ 
+                  
                       fontWeight: 'bold', 
                       color: 'red' }}
                   >
@@ -78,123 +67,97 @@ class App extends React.Component{
                   </li>
                   <li>{element.description}</li>
               </ul>
-          )
-      }
-  )
+            )
+          }
+        )
 
-  let listItemsMovies = this.state.movieData.map(
-    (element, idx) => {
-        return (
-          <CardGroup>
-              <Card
-              key={idx} 
-          
-              >
-                <Card.Img variant="top" src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`}
-                />
-
-                <Card.Title >
+    let listItemsMovies = this.state.movieData.map(
+      (element, idx) => {
+          return (
+            <Col className='h-100'>
+                <Card 
+                className="card text-center h-100"
+                key={idx} 
+                style={{ width: '16em', padding: '10px', margin: '2rem'}}
+                >
+                <Card.Title style={{height: '50px', overflow:'auto' }} >
                   {element.title}
                 </Card.Title>
 
-                <Card.Text>
+                <Card.Img 
+                className="h-100"
+                variant="top" 
+                src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`}
+                height="32em"
+                />
+
+                <Card.Footer style={{height: '40px', overflow:'auto' }}>
                   {element.released}
-                </Card.Text>
-            </Card>
-          </CardGroup>
-        )
-    }
-)
-
-// let listItemsMovies = this.state.movieData.map(
-//   (element, idx) => {
-//       return (
-//         <Container>
-//             <ul
-//             className='overflow-auto'
-//             key={idx} 
-//             type="none"
-//             >
-//               <li> 
-//                 <img 
-//                 alt='alt'
-//                 src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`}
-//                 /> 
-//               </li>
-
-//               <li style={{ 
-//                 fontWeight: 'bold', 
-//                 color: 'black' }}
-//               >
-//                 {element.title}
-//               </li>
-
-//               <li>
-//                 {element.released}
-//               </li>
-//           </ul>
-//         </Container>
-//       )
-//   }
-// )
-
-
-    // let currentWeatherDataDescription = this.state.weatherData.map((element, idx) => <li key={idx}>{element.description}</li>);
-    // let currentWeatherDataDate = this.state.weatherData.map((element, idx) => <li key={idx}>{element.date}: </li>);
-    
-    // let currentMovieData = this.state.movieData.map((element, idx) => <li key={idx}>{element.data} </li>);
-    
-
-    // console.log(this.state.cityData.data[0].boundingbox[0],this.state.cityData.data[0].boundingbox[2] )
-    // console.log(this.state);
+                </Card.Footer>
+              </Card>
+            </Col>
+          )
+        }
+      )
 
     return (
-    <>
-      <header className="bg-dark text-white">
-   
-      <form  onSubmit={this.getCityData}>
-          <label>Pick a city:
-            <input type="text" onInput={this.handleCityInput} placeholder='City Name'/>
-            <Button type="submit">Explore!</Button>
-          </label>
-        </form>
-        </header>
+    <>      
+      <h2 style={{textAlign: 'center', marginTop:'40px' }}> Welcome to City Explorer! {this.city}</h2>
 
-      {this.state.error 
+      <header className="bg-dark text-white">
+
+        <form  onSubmit={this.getCityData}>
+            <label>Pick a city:
+              <input type="text" onInput={this.handleCityInput} placeholder='City Name'/>
+              <Button id="toggle" type="submit">Explore!</Button>
+            </label>
+        </form>
+      </header>
+
+        {this.state.error 
+
           ?
+
           <p>{this.state.errorMessage}</p>
 
           :
 
-
           <ListGroup>
-
-        <ListGroup.Item > City: {this.state.cityData.display_name} </ListGroup.Item> 
-        <ListGroup.Item>lat: {this.state.cityData.lat}</ListGroup.Item> 
-        <ListGroup.Item> lon: {this.state.cityData.lon}</ListGroup.Item> 
-        <ListGroup.Item> <img alt={this.state.cityData.display_name} src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10&size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}/></ListGroup.Item>
-
-        {/* <ListGroup.Item>{currentMovieData}</ListGroup.Item> */}
-      
-        </ListGroup>
-      } 
- 
-
-      <footer>
-      <Weather
-            // currentWeatherDataDescription={currentWeatherDataDescription}
-            // currentWeatherDataDate={currentWeatherDataDate}
-            listItems={listItems}
-            weatherData={this.state.weatherData}
-            error={this.state.error}
-            errorMessage={this.state.errorMessage}
-            getCityData={this.getCityData}
-            />
-            {listItemsMovies}
-
             
+            <ListGroup.Item > City: {this.state.cityData.display_name} </ListGroup.Item> 
+            <ListGroup.Item>lat: {this.state.cityData.lat}</ListGroup.Item> 
+            <ListGroup.Item> lon: {this.state.cityData.lon}</ListGroup.Item> 
+            <ListGroup.Item> <img alt={this.state.cityData.display_name} src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10&size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}/></ListGroup.Item>
+          </ListGroup>
+        } 
+      <footer>
+
+        <Weather
+              listItems={listItems}
+              weatherData={this.state.weatherData}
+              error={this.state.error}
+              errorMessage={this.state.errorMessage}
+              getCityData={this.getCityData}
+        />
+        {this.state.error 
+
+        ?
+
+          <p>{this.state.errorMessage}</p>
+
+        :
+
+          <Container>
+
+          <h1 style={{textAlign: 'center', marginTop:'40px' }}>Movies containing city name {this.city}</h1>
+          <Row xs={1} md={4} className="h-100" >
+
+          {listItemsMovies}
+          </Row>
+          </Container>
+        }
       </footer>
-    </>
+      </>
     );
   }
 }
