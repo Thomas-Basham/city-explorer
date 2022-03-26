@@ -51,3 +51,5 @@ React, Bootstrap, Axios
     Michelle 
     Ella helped me with lab 7
     Shout out to Keian and David for the great TA help
+    Cameron for all your notes and patience 
+    Sheyna for teaching a dense subject 
