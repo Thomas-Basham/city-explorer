@@ -2,8 +2,9 @@ import './App.css';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import {  Button, Card, Row, Container, ListGroup, Col } from 'react-bootstrap';
+import {  Button, Card, ListGroup, Col } from 'react-bootstrap';
 import Weather from './Weather';
+import Movies from './Movies';
 class App extends React.Component{
   constructor(props){
   super(props);
@@ -29,11 +30,11 @@ class App extends React.Component{
     e.preventDefault();
     try {
       // Get the movie database json data from our server
-      let movieData = await axios.get(`${process.env.REACT_APP_SERVER}/movies?city_name=${this.state.city}`);
+      let movieData = await axios.get(`${process.env.REACT_APP_SERVER}/movies?city=${this.state.city}`);
       this.setState({movieData: movieData.data})  // .data is built into axios
 
       // Get weatherbit json data from our server
-      let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weatherbit?city_name=${this.state.city}`);
+      let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weather?city=${this.state.city}`);
       this.setState({weatherData: weatherData.data})  // .data is built into axios
 
       // get the data from the location iq API
@@ -86,9 +87,10 @@ class App extends React.Component{
 
                 <Card.Img 
                 className="h-100"
+                style={{ overflow:'auto' }}
                 variant="top" 
-                src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`}
-                height="32em"
+                src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`} // ? src=''  : src=''
+                height="400px"
                 />
 
                 <Card.Footer style={{height: '40px', overflow:'auto' }}>
@@ -139,23 +141,14 @@ class App extends React.Component{
               errorMessage={this.state.errorMessage}
               getCityData={this.getCityData}
         />
-        {this.state.error 
 
-        ?
-
-          <p>{this.state.errorMessage}</p>
-
-        :
-
-          <Container>
-
-          <h1 style={{textAlign: 'center', marginTop:'40px' }}>Movies containing city name {this.city}</h1>
-          <Row xs={1} md={4} className="h-100" >
-
-          {listItemsMovies}
-          </Row>
-          </Container>
-        }
+        <Movies
+          error={this.state.error}
+          errorMessage={this.state.errorMessage}
+          getCityData={this.getCityData}
+          listItemsMovies={listItemsMovies}
+        
+        />
       </footer>
       </>
     );
