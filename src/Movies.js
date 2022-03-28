@@ -12,7 +12,7 @@ render(){
 
 return(
   <>
-  {this.props.error
+  {this.props.error || this.props.submitted
 
     ?
 

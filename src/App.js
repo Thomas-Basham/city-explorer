@@ -2,7 +2,7 @@ import './App.css';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import {  Button, Card, ListGroup, Col, Row } from 'react-bootstrap';
+import {  Button, Card, ListGroup, Col } from 'react-bootstrap';
 import Weather from './Weather';
 import Movies from './Movies';
 // import placeholder from './placehold.jpeg'
@@ -16,7 +16,8 @@ class App extends React.Component{
       error: false,
       errorMessage: '',
       city: '',
-      movieData: []
+      movieData: [],
+      submitted: true
   
     }
   }
@@ -43,6 +44,7 @@ class App extends React.Component{
       let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`);
       this.setState({cityData: cityData.data[0]})  // .data is built into axios
 
+      this.setState({submitted: false})
       } catch (error) {
         this.setState({
           error: true,
@@ -126,7 +128,7 @@ class App extends React.Component{
         </form>
       </header>
 
-        {this.state.error 
+        {this.state.error || this.state.submitted
 
           ?
 
@@ -143,16 +145,18 @@ class App extends React.Component{
           </ListGroup>
         } 
       <footer>
-
         <Weather
+              submitted={this.state.submitted}
               listItems={listItems}
               weatherData={this.state.weatherData}
               error={this.state.error}
               errorMessage={this.state.errorMessage}
               getCityData={this.getCityData}
         />
+            
 
         <Movies
+          submitted={this.state.submitted}
           error={this.state.error}
           errorMessage={this.state.errorMessage}
           getCityData={this.getCityData}
