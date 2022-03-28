@@ -12,7 +12,8 @@ class Weather extends React.Component {
 
 return(
   <>
-    {this.props.error 
+
+    {this.props.error || this.props.submitted
       ?
 
       <p>{this.props.errorMessage}</p>
