@@ -2,9 +2,11 @@ import './App.css';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import {  Button, Card, ListGroup, Col } from 'react-bootstrap';
+import {  Button, Card, ListGroup, Col, Row } from 'react-bootstrap';
 import Weather from './Weather';
 import Movies from './Movies';
+// import placeholder from './placehold.jpeg'
+import placeholderportrait from './placeholder-portrait.png'
 class App extends React.Component{
   constructor(props){
   super(props);
@@ -56,21 +58,20 @@ class App extends React.Component{
       (element, idx) => {
           return (
             
-              <ul style={{listStyle: 'none', marginTop: '20px'}} key={idx} 
-                  type="disc">
-                  <li 
-                  style={{ 
-                  
-                      fontWeight: 'bold', 
-                      color: 'red' }}
-                  >
-                      {element.date}
-                  </li>
-                  <li>{element.description}</li>
-              </ul>
-            )
-          }
+          <ul style={{listStyle: 'none', marginTop: '20px'}} 
+              key={idx} 
+              type="disc">
+              <li style={{ 
+                  fontWeight: 'bold', 
+                  color: 'red' }}>
+                    
+                  {element.date}</li>
+
+              <li>{element.description}</li>
+          </ul>
         )
+      }
+    )
 
     let listItemsMovies = this.state.movieData.map(
       (element, idx) => {
@@ -84,15 +85,24 @@ class App extends React.Component{
                 <Card.Title style={{height: '50px', overflow:'auto' }} >
                   {element.title}
                 </Card.Title>
+                {element.posterPath ?
 
                 <Card.Img 
                 className="h-100"
                 style={{ overflow:'auto' }}
                 variant="top" 
-                src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`} // ? src=''  : src=''
+                src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`} 
                 height="400px"
                 />
-
+                    : 
+                    <Card.Img 
+                    className="h-100"
+                    style={{ overflow:'auto' }}
+                    variant="top" 
+                    src={placeholderportrait}
+                    height="400px"
+                    />
+                }
                 <Card.Footer style={{height: '40px', overflow:'auto' }}>
                   {element.released}
                 </Card.Footer>
