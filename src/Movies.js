@@ -22,7 +22,7 @@ return(
 
     <Container>
 
-      <h1 style={ { textAlign: 'center', marginTop: '40px' } }> Movies containing city name { this.city } </h1>
+      <h1 style={ { textAlign: 'center', marginTop: '40px' } }> Movies containing {this.props.city} </h1>
       <Row xs = { 1} md = { 4} className = "h-100" >
 
         { this.props.listItemsMovies }

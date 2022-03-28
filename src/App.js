@@ -78,11 +78,10 @@ class App extends React.Component{
     let listItemsMovies = this.state.movieData.map(
       (element, idx) => {
           return (
-            <Col className='h-100'>
+            <Col className='h-100'key={idx} >
                 <Card 
-                className="card text-center h-100"
-                key={idx} 
-                style={{ width: '16em', padding: '10px', margin: '2rem'}}
+                className="card text-center h-100" 
+                style={{ width: 'auto', height: '600px', padding: '10px', margin: '2rem'}}
                 >
                 <Card.Title style={{height: '50px', overflow:'auto' }} >
                   {element.title}
@@ -94,15 +93,14 @@ class App extends React.Component{
                 style={{ overflow:'auto' }}
                 variant="top" 
                 src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`} 
-                height="400px"
+                height="300px"
                 />
                     : 
                     <Card.Img 
                     className="h-100"
-                    style={{ overflow:'auto' }}
                     variant="top" 
                     src={placeholderportrait}
-                    height="400px"
+                    height="900px"
                     />
                 }
                 <Card.Footer style={{height: '40px', overflow:'auto' }}>
@@ -146,16 +144,18 @@ class App extends React.Component{
         } 
       <footer>
         <Weather
-              submitted={this.state.submitted}
-              listItems={listItems}
-              weatherData={this.state.weatherData}
-              error={this.state.error}
-              errorMessage={this.state.errorMessage}
-              getCityData={this.getCityData}
+          city={this.state.city}
+          submitted={this.state.submitted}
+          listItems={listItems}
+          weatherData={this.state.weatherData}
+          error={this.state.error}
+          errorMessage={this.state.errorMessage}
+          getCityData={this.getCityData}
         />
             
 
         <Movies
+          city={this.state.city}
           submitted={this.state.submitted}
           error={this.state.error}
           errorMessage={this.state.errorMessage}
