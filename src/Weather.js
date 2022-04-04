@@ -20,8 +20,9 @@ return(
 
       :
 
-      <div className='' style={{ flexDirection: 'row', textAlign: 'center' }}> 
-          <h1 style={{textAlign: 'center', marginTop:'40px' }}>Current weather Forecast for {this.props.city}</h1>
+      <div className='' style={{ backgroundImage: `url(${this.props.imgData[0]})`,
+        backgroundSize: "100%", flexDirection: 'row', textAlign: 'center' }}> 
+          <h1 style={{textAlign: 'center', marginTop:'40px' }}>Current weather forecast for {this.props.city}</h1>
 
       {this.props.listItems}
 
