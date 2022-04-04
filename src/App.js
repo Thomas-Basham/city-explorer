@@ -41,7 +41,7 @@ class App extends React.Component {
       let imgData = await axios.get(
         `${process.env.REACT_APP_SERVER}/imsea?q=${this.state.city}`
       );
-      this.setState({ imgData: imgData.data }); // .data is built into axios
+      this.setState({ imgData: imgData.data[0] }); // .data is built into axios
 
       // Get weatherbit json data from our server
       let weatherData = await axios.get(
@@ -132,8 +132,18 @@ class App extends React.Component {
         </Col>
       );
     });
-
-    console.log(this.state.imgData[0]);
+    const removeDoubles = [...new Set(this.state.imgData)]
+    let imgCards = removeDoubles.map((element, idx) => {
+      return (
+        <img
+        style={{ width: 400, height: 250, padding: 20}}
+        key={idx}
+        alt={idx}
+        src={element}
+        />
+      );
+      });
+    console.log(this.state.imgData);
     return (
       <>
         <h2 style={{ textAlign: "center", marginTop: "40px" }}>
@@ -186,9 +196,14 @@ class App extends React.Component {
             errorMessage={this.state.errorMessage}
             getCityData={this.getCityData}
           />
-
-          {/* <Container>{imgCards}</Container> */}
-
+           {this.state.error || this.state.submitted ? (
+          <p>{this.state.errorMessage}</p>
+        ) : (
+          <Container>
+            <h2 style={{ textAlign: 'center'}}>{this.state.city} images</h2>
+            {imgCards}
+          </Container>
+        )}
           <Movies
             city={this.state.city}
             submitted={this.state.submitted}
