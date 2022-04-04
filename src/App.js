@@ -2,7 +2,7 @@ import "./App.css";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
-import { Button, Card, ListGroup, Col, Container } from "react-bootstrap";
+import { Button, Card, ListGroup, Row, Col, Container } from "react-bootstrap";
 import Weather from "./Weather";
 import Movies from "./Movies";
 // import placeholder from './placehold.jpeg'
@@ -19,6 +19,7 @@ class App extends React.Component {
       movieData: [],
       submitted: true,
       imgData: [],
+      itunesData: [],
     };
   }
 
@@ -43,6 +44,11 @@ class App extends React.Component {
       );
       this.setState({ imgData: imgData.data[0] }); // .data is built into axios
 
+      let itunesData = await axios.get(
+        `${process.env.REACT_APP_SERVER}/itunes?term=${this.state.city}`
+      );
+      this.setState({ itunesData: itunesData.data }); // .data is built into axios
+
       // Get weatherbit json data from our server
       let weatherData = await axios.get(
         `${process.env.REACT_APP_SERVER}/weather?city=${this.state.city}`
@@ -63,6 +69,7 @@ class App extends React.Component {
       });
     }
   };
+
   renderImage = (imageUrl) => {
     return (
       <div>
@@ -132,18 +139,37 @@ class App extends React.Component {
         </Col>
       );
     });
-    const removeDoubles = [...new Set(this.state.imgData)]
+    const removeDoubles = [...new Set(this.state.imgData)];
     let imgCards = removeDoubles.map((element, idx) => {
       return (
         <img
-        style={{ width: 400, height: 250, padding: 20}}
-        key={idx}
-        alt={idx}
-        src={element}
+          style={{ width: 400, height: 250, padding: 20 }}
+          key={idx}
+          alt={idx}
+          src={element}
         />
       );
-      });
-    console.log(this.state.imgData);
+    });
+    let itunesList = this.state.itunesData.map((element, idx) => {
+      return (
+        <Col className="h-100" key={idx} style={{paddingTop: 15}} >
+
+        <ul style={{padding: 5, flexDirection: 'row',textAlign: 'center', listStyle: "none" ,textAlign: "center"}}>
+          <li
+          style={{  width: 300 ,background:"grey"}}
+          >
+            {element.artistName}
+          </li>
+          <li
+          style={{  width: 300 ,background:"grey"}}
+          >
+            {element.trackName}
+          </li>
+        </ul>
+        </Col>
+      );
+    });
+    console.log(this.state.itunesData);
     return (
       <>
         <h2 style={{ textAlign: "center", marginTop: "40px" }}>
@@ -196,14 +222,36 @@ class App extends React.Component {
             errorMessage={this.state.errorMessage}
             getCityData={this.getCityData}
           />
-           {this.state.error || this.state.submitted ? (
-          <p>{this.state.errorMessage}</p>
-        ) : (
-          <Container>
-            <h2 style={{ textAlign: 'center'}}>{this.state.city} images</h2>
-            {imgCards}
-          </Container>
-        )}
+          {this.state.error || this.state.submitted ? (
+            <p>{this.state.errorMessage}</p>
+          ) : (
+            <Container>
+              <h2 style={{ textAlign: "center" }}>{this.state.city} images</h2>
+              {imgCards}
+            </Container>
+          )}
+          {this.state.error || this.state.submitted ? (
+            <p>{this.state.errorMessage}</p>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                backgroundImage: `url(${this.state.imgData[3]})`,
+                backgroundSize: "100%",
+                flexDirection: "row",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              <h1 style={{ padding: 15, textAlign: "center", marginTop: "40px" }}>
+                Song names containing {this.state.city}
+              </h1>
+              <Row xs = { 1} md = { 4} className = "h-100" >
+
+              {itunesList}
+              </Row>
+            </div>
+          )}
           <Movies
             city={this.state.city}
             submitted={this.state.submitted}
