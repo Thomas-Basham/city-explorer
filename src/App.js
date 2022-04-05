@@ -5,6 +5,7 @@ import React from "react";
 import { Button, Card, ListGroup, Row, Col, Container } from "react-bootstrap";
 import Weather from "./Weather";
 import Movies from "./Movies";
+import AddSongButton from "./AddSongButton";
 // import placeholder from './placehold.jpeg'
 import placeholderportrait from "./placeholder-portrait.png";
 class App extends React.Component {
@@ -20,6 +21,7 @@ class App extends React.Component {
       submitted: true,
       imgData: [],
       itunesData: [],
+      songSelection: [],
     };
   }
 
@@ -77,8 +79,75 @@ class App extends React.Component {
       </div>
     );
   };
+  getSongs = async () => {
+    try {
+      
+      let url = `${process.env.REACT_APP_SERVER}/song`
+      let songs = await axios.get(url);
+      this.setState({
+        songSelection: songs.data,
+      })
+    } catch(error) {
+      console.log(error);
+    }
+  }
+  componentDidMount() {
+    this.getSongs();
+  }
+
+  postSong = async (newSong) => {
+    try {
+      let url = `${process.env.REACT_APP_SERVER}/song`;
+      let createdSong = await axios.post(url, newSong);
+      this.setState({
+        songSelection: [...this.state.songSelection, createdSong.data],
+      });
+    } catch (error) {
+      console.log("we have an error:", error.response.data);
+    }
+  };
+
+  handleAddSong = (e) => {
+    e.preventDefault();
+    let newSong = {
+      artist: this.state.itunesData[0].artistName,
+      track: this.state.itunesData[0].trackName,
+      artwork: this.state.itunesData[0].artWork,
+      email: "bashamtg@gmail.com"  
+    }
+    console.log(newSong);
+    this.postSong(newSong);
+  }
   render() {
-    // console.log(this.state);
+    console.log(this.state.songSelection);
+    let itunesList = this.state.itunesData.map((element, idx) => {
+      return (
+        <Col className="h-100" key={idx} style={{ paddingTop: 15 }}>
+          <ul
+            style={{
+              padding: 5,
+              flexDirection: "row",
+              textAlign: "center",
+              listStyle: "none",
+            }}
+          >
+            <li style={{ width: 300, background: "grey" }}>
+              {element.artistName}
+            </li>
+            <li style={{ width: 300, background: "grey" }}>
+              {element.trackName}
+            </li>
+            <AddSongButton
+            artistName = {element.artistName}
+            trackName = {element.trackName}
+            artWork = {element.artWork}
+            postSong = {this.postSong}
+            />
+            {/* <button onClick={this.handleAddSong} >Add Song</button> */}
+          </ul>
+        </Col>
+      );
+    });
 
     let listItems = this.state.weatherData.map((element, idx) => {
       return (
@@ -150,25 +219,7 @@ class App extends React.Component {
         />
       );
     });
-    let itunesList = this.state.itunesData.map((element, idx) => {
-      return (
-        <Col className="h-100" key={idx} style={{paddingTop: 15}} >
 
-        <ul style={{padding: 5, flexDirection: 'row',textAlign: 'center', listStyle: "none" ,textAlign: "center"}}>
-          <li
-          style={{  width: 300 ,background:"grey"}}
-          >
-            {element.artistName}
-          </li>
-          <li
-          style={{  width: 300 ,background:"grey"}}
-          >
-            {element.trackName}
-          </li>
-        </ul>
-        </Col>
-      );
-    });
     console.log(this.state.itunesData);
     return (
       <>
@@ -212,6 +263,29 @@ class App extends React.Component {
           </ListGroup>
         )}
         <footer>
+        {this.state.error || this.state.submitted ? (
+            <p>{this.state.errorMessage}</p>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                backgroundImage: `url(${this.state.imgData[3]})`,
+                backgroundSize: "100%",
+                flexDirection: "row",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              <h1
+                style={{ padding: 15, textAlign: "center", marginTop: "40px" }}
+              >
+                Song names containing {this.state.city}
+              </h1>
+              <Row xs={1} md={4} className="h-100">
+                {itunesList}
+              </Row>
+            </div>
+          )}
           <Weather
             imgData={this.state.imgData}
             city={this.state.city}
@@ -230,28 +304,7 @@ class App extends React.Component {
               {imgCards}
             </Container>
           )}
-          {this.state.error || this.state.submitted ? (
-            <p>{this.state.errorMessage}</p>
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                backgroundImage: `url(${this.state.imgData[3]})`,
-                backgroundSize: "100%",
-                flexDirection: "row",
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              <h1 style={{ padding: 15, textAlign: "center", marginTop: "40px" }}>
-                Song names containing {this.state.city}
-              </h1>
-              <Row xs = { 1} md = { 4} className = "h-100" >
 
-              {itunesList}
-              </Row>
-            </div>
-          )}
           <Movies
             city={this.state.city}
             submitted={this.state.submitted}
