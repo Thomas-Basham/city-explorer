@@ -1,5 +1,12 @@
 .list-group:last-child {
   list-style: none;
-  display: flex;
-  flex-direction: row;
+}
+.weather {
+  width: 5vmax;
+  height: 12vmax;
+  padding: 4px;
+  border-radius: 3px;
+  font-size: calc(0.02px + 1vmin);
+  margin-top: 1vh;
+  margin-right: 3vh;
 }
