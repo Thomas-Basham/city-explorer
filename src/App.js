@@ -5,8 +5,6 @@ import React from "react";
 import { Button, Card, ListGroup, Row, Col, Container } from "react-bootstrap";
 import Weather from "./Weather";
 import Movies from "./Movies";
-// import placeholder from './placehold.jpeg'
-import placeholderportrait from "./placeholder-portrait.png";
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -20,6 +18,7 @@ class App extends React.Component {
       submitted: true,
       imgData: [],
       itunesData: [],
+      songSelection: [],
     };
   }
 
@@ -77,13 +76,83 @@ class App extends React.Component {
       </div>
     );
   };
+  getSongs = async () => {
+    try {
+      let url = `${process.env.REACT_APP_SERVER}/song`;
+      let songs = await axios.get(url);
+      this.setState({
+        songSelection: songs.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  componentDidMount() {
+    this.getSongs();
+  }
+
+  postSong = async (newSong) => {
+    try {
+      let url = `${process.env.REACT_APP_SERVER}/song`;
+      let createdSong = await axios.post(url, newSong);
+      this.setState({
+        songSelection: [...this.state.songSelection, createdSong.data],
+      });
+    } catch (error) {
+      console.log("we have an error:", error.response.data);
+    }
+  };
+
+  handleAddSong = (e) => {
+    e.preventDefault();
+    let newSong = {
+      artist: this.state.itunesData[0].artistName,
+      track: this.state.itunesData[0].trackName,
+      artwork: this.state.itunesData[0].artWork,
+      email: "bashamtg@gmail.com",
+    };
+    console.log(newSong);
+    this.postSong(newSong);
+  };
   render() {
-    // console.log(this.state);
+    console.log(this.state.songSelection);
+    let itunesList = this.state.itunesData.map((element, idx) => {
+      return (
+        <Col className="h-100" key={idx} style={{ paddingTop: 15 }}>
+          <ul
+            className="w-100"
+            style={{
+              background: "grey",
+              opacity: 0.8,
+              borderRadius: 3,
+              padding: 1,
+              flexDirection: "row",
+              listStyle: "none",
+              height: "max-content",
+            }}
+          >
+            <li
+              className="tuneslist"
+              style={{ width: "fit-content", textAlign: "left" }}
+            >
+              <strong> {element.trackName} </strong>
+              <li
+                className="tuneslist"
+                style={{ width: "fit-content", height: "max-content" }}
+              >
+                {element.artistName}
+              </li>
+            </li>
+          </ul>
+        </Col>
+      );
+    });
 
     let listItems = this.state.weatherData.map((element, idx) => {
       return (
         <ul
-          style={{ listStyle: "none", marginTop: "20px" }}
+          className="w-100"
+          style={{ listStyle: "none", marginTop: "1vmax", height: "1vmax" }}
           key={idx}
           type="disc"
         >
@@ -108,7 +177,7 @@ class App extends React.Component {
             className="card text-center h-100"
             style={{
               width: "auto",
-              height: "600px",
+              height: "50vh",
               padding: "10px",
               margin: "2rem",
             }}
@@ -118,21 +187,20 @@ class App extends React.Component {
             </Card.Title>
             {element.posterPath ? (
               <Card.Img
-                className="h-100"
                 style={{ overflow: "auto" }}
                 variant="top"
                 src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`}
-                height="300px"
+                height="400vmax"
               />
             ) : (
               <Card.Img
-                className="h-100"
                 variant="top"
-                src={placeholderportrait}
-                height="900px"
+                src="https://dummyimage.com/300x600.jpg?text=No%20Image%20Found"
+                alt="image not available"
+                height="400vmax"
               />
             )}
-            <Card.Footer style={{ height: "40px", overflow: "auto" }}>
+            <Card.Footer style={{ height: "53px", overflow: "auto" }}>
               {element.released}
             </Card.Footer>
           </Card>
@@ -150,69 +218,62 @@ class App extends React.Component {
         />
       );
     });
-    let itunesList = this.state.itunesData.map((element, idx) => {
-      return (
-        <Col className="h-100" key={idx} style={{paddingTop: 15}} >
 
-        <ul style={{padding: 5, flexDirection: 'row',textAlign: 'center', listStyle: "none" ,textAlign: "center"}}>
-          <li
-          style={{  width: 300 ,background:"grey"}}
-          >
-            {element.artistName}
-          </li>
-          <li
-          style={{  width: 300 ,background:"grey"}}
-          >
-            {element.trackName}
-          </li>
-        </ul>
-        </Col>
-      );
-    });
     console.log(this.state.itunesData);
     return (
       <>
-        <h2 style={{ textAlign: "center", marginTop: "40px" }}>
-          Welcome to City Explorer! {this.city}
-        </h2>
+        <header className="bg-dark  text-white fixed-top row">
+          {this.state.error || this.state.submitted ? (
+            <p>{this.state.errorMessage}</p>
+          ) : (
+            <div className="col" id="map">
+              <ListGroup>
+                <ListGroup.Item>
+                  {" "}
+                  {this.state.cityData.display_name}{" "}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <img
+                    alt={this.state.cityData.display_name}
+                    width="70vw"
+                    src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10&size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}
+                  />
+                  <p style={{ marginBottom: 0 }}>
+                    lat: {this.state.cityData.lat}
+                  </p>
+                  <p style={{ marginBottom: 0 }}>
+                    lon: {this.state.cityData.lon}
+                  </p>
+                </ListGroup.Item>
+              </ListGroup>
+            </div>
+          )}
+          <div className="col">
+            {this.state.submitted === true ? (
+              <h2 style={{ textAlign: "center", marginTop: "40px" }}>
+                Welcome to City Explorer! {this.city}
+              </h2>
+            ) : (
+              ""
+            )}
 
-        <header className="bg-dark text-white">
-          <form onSubmit={this.getCityData}>
-            <label>
-              Pick a city:
-              <input
-                type="text"
-                onInput={this.handleCityInput}
-                placeholder="City Name"
-              />
-              <Button id="toggle" type="submit">
-                Explore!
-              </Button>
-            </label>
-          </form>
-        </header>
-
-        {this.state.error || this.state.submitted ? (
-          <p>{this.state.errorMessage}</p>
-        ) : (
-          <ListGroup>
-            <ListGroup.Item>
-              {" "}
-              City: {this.state.cityData.display_name}{" "}
-            </ListGroup.Item>
-            <ListGroup.Item>lat: {this.state.cityData.lat}</ListGroup.Item>
-            <ListGroup.Item> lon: {this.state.cityData.lon}</ListGroup.Item>
-            <ListGroup.Item>
-              {" "}
-              <img
-                alt={this.state.cityData.display_name}
-                src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10&size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}
-              />
-            </ListGroup.Item>
-          </ListGroup>
-        )}
-        <footer>
+            <form id="searchForm" onSubmit={this.getCityData}>
+              <label>
+                Pick a city
+                <input
+                  className="input-txt"
+                  type="text"
+                  onInput={this.handleCityInput}
+                  placeholder="Search powered by WeatherBit™, LocationIQ™, ImSea™, Itunes™, IMDB™"
+                />
+                <Button variant="outline-primary" id="toggle" type="submit">
+                  Explore!
+                </Button>
+              </label>
+            </form>
+          </div>
           <Weather
+            className="col"
             imgData={this.state.imgData}
             city={this.state.city}
             submitted={this.state.submitted}
@@ -222,45 +283,58 @@ class App extends React.Component {
             errorMessage={this.state.errorMessage}
             getCityData={this.getCityData}
           />
+        </header>
+
+        <main>
+          {this.state.error || this.state.submitted ? (
+            <p>{this.state.errorMessage}</p>
+          ) : (
+            <Container
+              style={{
+                paddingTop: 30,
+                paddingRight: "max-content",
+                display: "flex",
+                backgroundImage: `url(${this.state.imgData[3]})`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                textAlign: "center",
+              }}
+            >
+              <h2
+                style={{ padding: 15, textAlign: "center", marginTop: "4vh" }}
+              >
+                Song names containing {this.state.city}
+              </h2>
+              <Row xs={1} s={2} md={4} className="h-100 w-100" style={{}}>
+                {itunesList}
+              </Row>
+            </Container>
+          )}
+
           {this.state.error || this.state.submitted ? (
             <p>{this.state.errorMessage}</p>
           ) : (
             <Container>
-              <h2 style={{ textAlign: "center" }}>{this.state.city} images</h2>
+              <h2 style={{ textAlign: "center", marginTop: "20px" }}>
+                {" "}
+                {this.state.city} images{" "}
+              </h2>
               {imgCards}
             </Container>
           )}
-          {this.state.error || this.state.submitted ? (
-            <p>{this.state.errorMessage}</p>
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                backgroundImage: `url(${this.state.imgData[3]})`,
-                backgroundSize: "100%",
-                flexDirection: "row",
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              <h1 style={{ padding: 15, textAlign: "center", marginTop: "40px" }}>
-                Song names containing {this.state.city}
-              </h1>
-              <Row xs = { 1} md = { 4} className = "h-100" >
+          <Container>
+            <Movies
+              city={this.state.city}
+              submitted={this.state.submitted}
+              error={this.state.error}
+              errorMessage={this.state.errorMessage}
+              getCityData={this.getCityData}
+              listItemsMovies={listItemsMovies}
+            />
+          </Container>
+        </main>
 
-              {itunesList}
-              </Row>
-            </div>
-          )}
-          <Movies
-            city={this.state.city}
-            submitted={this.state.submitted}
-            error={this.state.error}
-            errorMessage={this.state.errorMessage}
-            getCityData={this.getCityData}
-            listItemsMovies={listItemsMovies}
-          />
-        </footer>
+        <footer></footer>
       </>
     );
   }

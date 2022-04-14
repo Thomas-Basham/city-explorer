@@ -1,48 +1,45 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-#root{
-  display: flex;
-  flex-direction: column;
+#root {
   align-items: center;
-  justify-content:space-between;
-  background-color: lightblue;
-}
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
-.list-group-item {
+
+header {
   text-align: center;
+  padding-bottom: 2vh;
 }
-.App-link {
-  color: #61dafb;
+.input-txt::placeholder {
+  font-size: calc(2px + 1vmin);
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.input-txt {
+  margin: 1em;
+  padding-inline: 1vw;
+  width: 30vw;
 }
 
+#searchForm {
+  padding-top: 1vmax;
+  margin: 0 auto;
+}
+
+/* .list-group-item {
+  font-size: calc(1px + 1vmin);
+  text-align: center;
+  margin-block: 100%;
+  padding-block: auto;
+} */
+main {
+  margin-top: 25vh;
+}
+
+#map {
+  margin-top: 1vh;
+  margin-left: 2vh;
+  width: 5vmax;
+  height: 12vmax;
+  font-size: calc(1px + 1vmin);
+}
+
+.tuneslist {
+  font-size: calc(6px + 1vmin);
+}
