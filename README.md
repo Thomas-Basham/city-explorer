@@ -1,8 +1,9 @@
 # City Explorer
 
-**Author**:Thomas Basham
-**Version**: 1.0.0
-[https://city-explorer-thomas-basham.netlify.app/]
+**Author**: Thomas Basham
+**Version**: 3.0.0
+
+[Deployed Link](https://city-explorer-thomas-basham.netlify.app/)
 
 ## Overview
 
@@ -10,7 +11,7 @@
 
 ## Architecture
 
-React, Bootstrap, Axios
+React, Bootstrap, Axios, Dotenv, Itunes API, LocationIQ API, WeatherBit API, ImSea API, IMDB API
 
 ## Credit and Collaborations
 
