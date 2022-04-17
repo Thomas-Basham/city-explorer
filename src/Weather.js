@@ -16,7 +16,7 @@ class Weather extends React.Component {
               textAlign: "center",
             }}
           >
-            <h8>Current weather forecast for {this.props.city}</h8>
+            <h6>Current weather forecast for {this.props.city}</h6>
 
             {this.props.listItems}
           </div>
