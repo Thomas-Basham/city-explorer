@@ -230,11 +230,12 @@ class App extends React.Component {
         </Col>
       );
     });
+    
     const removeDoubles = [...new Set(this.state.imgData)];
     let imgCards = removeDoubles.map((element, idx) => {
       return (
         <img
-          style={{ width: 300, height: 300, padding: 20 }}
+          style={{ width: 300, height: 300, padding: 20, borderRadius: "10px" }}
           key={idx}
           alt={idx}
           src={element}
