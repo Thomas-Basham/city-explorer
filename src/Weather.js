@@ -11,7 +11,7 @@ class Weather extends React.Component {
             textAlign: "center",
             marginInline: "auto",
             paddingInline: 0,
-            marginBottom: 0
+            marginBottom: 0,
           }}
           key={idx}
           type="disc"
@@ -40,7 +40,7 @@ class Weather extends React.Component {
               backgroundImage: `url(${this.props.imgData[0]})`,
               backgroundSize: "cover",
               textAlign: "center",
-              marginInline: "auto"
+              marginInline: "auto",
             }}
           >
             <h6>Current weather forecast for {this.props.city}</h6>

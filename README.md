@@ -2,11 +2,11 @@
 
 **Author**:Thomas Basham
 **Version**: 1.0.0
-[https://main--city-explorer-thomas-basham.netlify.app/]
+[https://city-explorer-thomas-basham.netlify.app/]
 
 ## Overview
 
-  A React Web app that takes a user's input of a city name and gives the user a visual display of data from requested api databases
+  A Full Stack, Mobile First, React Web app that takes a user's input of a city name and gives the user a visual display of data from requested api databases
 
 ## Architecture
 

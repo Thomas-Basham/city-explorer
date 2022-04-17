@@ -10,6 +10,7 @@ export default class Itunes extends Component {
           key={idx}
           style={{ paddingTop: 15, width: "fit-content" }}
         >
+          <a href={element.trackViewUrl}target="_blank" rel="noopener noreferrer" style={{textDecoration:"none", color:"white"}}>
           <ul
             className="tuneslist"
             style={{
@@ -33,6 +34,7 @@ export default class Itunes extends Component {
               {element.artistName}
             </li>
           </ul>
+          </a>
         </Col>
       );
     });
@@ -43,7 +45,7 @@ export default class Itunes extends Component {
           <p>{this.props.errorMessage}</p>
         ) : (
           <>
-            <h2 style={{ padding: 15, textAlign: "center", marginTop: "4vh" }}>
+            <h2 style={{ padding: 15, textAlign: "center", marginTop: "4vh", color:"white"}}>
               Song names containing {this.props.city}
             </h2>
             <Row xs={1} s={2} md={4} className="h-100">

@@ -9,22 +9,27 @@ import Classnames from "classnames";
 import Itunes from "./Itunes";
 import ImSea from "./ImSea";
 import LocationIQ from "./LocationIQ";
+import GithubCorner from 'react-github-corner';
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      // Search Form State
       city: "",
       submitted: true,
 
+      // API Data
       cityData: {},
       weatherData: [],
       movieData: [],
       imgData: [],
       itunesData: [],
 
+      // Err Handling
       error: false,
       errorMessage: "",
 
+      //Scroll Handling
       prevScrollpos: window.pageYOffset,
       visible: true,
     };
@@ -36,64 +41,45 @@ class App extends React.Component {
     });
   };
 
-  // Get our Data from Server API's
+  // Get Data from Server API's
   getCityData = async (e) => {
     e.preventDefault();
     try {
-      // Get the movie database json data from our server
+      // IMDB API
       let movieData = await axios.get(
         `${process.env.REACT_APP_SERVER}/movies?city=${this.state.city}`
       );
       this.setState({ movieData: movieData.data }); // .data is built into axios
-
+      // ImSEA API
       let imgData = await axios.get(
         `${process.env.REACT_APP_SERVER}/imsea?q=${this.state.city}`
       );
       this.setState({ imgData: imgData.data[0] }); // .data is built into axios
-
+      // Itunes API
       let itunesData = await axios.get(
         `${process.env.REACT_APP_SERVER}/itunes?term=${this.state.city}`
       );
       this.setState({ itunesData: itunesData.data }); // .data is built into axios
-
-      // Get weatherbit json data from our server
+      // Weatherbit API
       let weatherData = await axios.get(
         `${process.env.REACT_APP_SERVER}/weather?city=${this.state.city}`
       );
       this.setState({ weatherData: weatherData.data }); // .data is built into axios
-
-      // get the data from the location iq API
+      // LocationIQ API
       let cityData = await axios.get(
         `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`
       );
       this.setState({ cityData: cityData.data[0] }); // .data is built into axios
 
+      // Trigger Submit
       this.setState({ submitted: false });
     } catch (error) {
       this.setState({
         error: true,
-        errorMessage: `Error! Error: ${error.response.status}`,
+        errorMessage: `Error:${error.response.status} Is that an actual City Name? `,
       });
     }
   };
-
-  renderImage = (imageUrl) => {
-    return (
-      <div>
-        <img key="idx" alt="alt" src={imageUrl} />
-      </div>
-    );
-  };
-
-  // Adds an event listener when the component is mount.
-  componentDidMount() {
-    window.addEventListener("scroll", this.handleScroll);
-  }
-
-  // Remove the event listener when the component is unmount.
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
-  }
 
   // Hide or show the menu.
   handleScroll = () => {
@@ -107,15 +93,28 @@ class App extends React.Component {
       visible,
     });
   };
+
+  // Adds an event listener when the component is mount.
+  componentDidMount() {
+    window.addEventListener("scroll", this.handleScroll);
+  }
+
+  // Remove the event listener when the component is unmount.
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+  }
+
   render() {
     return (
       <>
         <header
           style={{ position: "sticky" }}
+          // Navbar Magic
           className={Classnames("navbar bg-dark  text-white", {
             "navbar--hidden ": !this.state.visible,
           })}
         >
+          <GithubCorner href="https://github.com/bashamtg/city-explorer" direction="left" size= '75' style={{zIndex:"10"}} />
           <LocationIQ
             city={this.state.city}
             submitted={this.state.submitted}
@@ -125,16 +124,13 @@ class App extends React.Component {
           />
 
           <div className="col">
-            {this.state.submitted === true 
-            ? (
+            {this.state.submitted === true ? (
               <h2 style={{ textAlign: "center", marginTop: "40px" }}>
                 Welcome to City Explorer! {this.city}
               </h2>
-            ) 
-            : (
+            ) : (
               ""
             )}
-
             <form id="searchForm" onSubmit={this.getCityData}>
               <label>
                 Pick a city
@@ -150,6 +146,7 @@ class App extends React.Component {
               </label>
             </form>
           </div>
+
           <Weather
             className="col"
             imgData={this.state.imgData}

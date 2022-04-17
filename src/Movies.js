@@ -3,7 +3,8 @@ import { Row, Col, Card } from "react-bootstrap";
 
 class Movies extends React.Component {
   render() {
-    let listItemsMovies = this.props.movieData.map((element, idx) => {
+    let slicedArray = this.props.movieData.slice(0,20)
+    let listItemsMovies = slicedArray.map((element, idx) => {
       return (
         <Col className="h-100" key={idx}>
           <Card
@@ -22,6 +23,7 @@ class Movies extends React.Component {
               <Card.Img
                 style={{ overflow: "auto" }}
                 variant="top"
+                height="310vh"
                 src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`}
               />
             ) : (
@@ -29,10 +31,10 @@ class Movies extends React.Component {
                 variant="top"
                 src="https://dummyimage.com/300x600.jpg?text=No%20Image%20Found"
                 alt="image not available"
-                height="400vmax"
+                height="310vh"
               />
             )}
-            <Card.Footer style={{ height: "53px", overflow: "auto" }}>
+            <Card.Footer style={{ height: "max-content", overflow: "auto" }}>
               {element.released}
             </Card.Footer>
           </Card>
