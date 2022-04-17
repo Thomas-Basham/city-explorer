@@ -145,16 +145,16 @@ class App extends React.Component {
     console.log(this.state.visible);
     let itunesList = this.state.itunesData.map((element, idx) => {
       return (
-        <Col className="h-100" key={idx} style={{ paddingTop: 15 }}>
+        <Col className="h-100" key={idx} style={{ paddingTop: 15, width: "fit-content" }}>
           <ul
-            className="w-100 tuneslist"
+            className="tuneslist"
             className=""
             style={{
               textAlign: "left",
               background: "grey",
               opacity: 0.8,
               borderRadius: 3,
-              padding: 1,
+              padding: 3,
               flexDirection: "row",
               listStyle: "none",
               height: "max-content",
@@ -249,7 +249,7 @@ class App extends React.Component {
       <>
         <header 
         style={{position:"sticky"}}
-        className={ Classnames("navbar bg-dark  text-white row ", {"navbar--hidden ": !this.state.visible})} >
+        className={ Classnames("navbar bg-dark  text-white", {"navbar--hidden ": !this.state.visible})} >
           {this.state.error || this.state.submitted ? (
             <p>{this.state.errorMessage}</p>
           ) : (
@@ -331,7 +331,7 @@ class App extends React.Component {
               >
                 Song names containing {this.state.city}
               </h2>
-              <Row xs={1} s={2} md={4} className="h-100 w-100" style={{}}>
+              <Row xs={1} s={2} md={4} className="h-100">
                 {itunesList}
               </Row>
             </Container>

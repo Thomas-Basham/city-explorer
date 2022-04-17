@@ -3,14 +3,17 @@
 }
 .weather {
   width: 5vmax;
-  height: 100;
-  padding: 4px;
+  height: max-content;
+  padding: 1vmax;
   border-radius: 3px;
-  font-size: calc(0.02px + 1vmin);
+  font-size: calc(1px + 1vmin);
   margin-top: 1vh;
   margin-right: 3vh;
+  text-align: center;
 }
-
+ul{
+  text-align: center;
+}
 h6{
   font-size: calc(4px + 2vmin);
 

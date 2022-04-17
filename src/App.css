@@ -1,5 +1,6 @@
 #root {
-  font-size: calc(10px + 2vmin);
+  font-size: calc(10px + 2vmin);  
+  display: block;
 }
 
 header {
@@ -10,12 +11,15 @@ header {
 .navbar {
   padding: 10px;
   top: 0;
+  height: 60vh;
+  width: 100%;
   transition: top 0.9s;
   z-index: 9;
 }
 
 .navbar--hidden {
-  position: sticky;
+  transition: top 1s;
+
   top: -100%;
 }
 
@@ -40,14 +44,16 @@ header {
   padding-block: auto;
 } */
 main {
-  margin-top: 28vh;
+  width: fit-content;
+  margin-top: 10vh;
+  margin-inline: auto;
+
 }
 
 #map {
   margin-top: 1vh;
   margin-left: 2vh;
-  width: 100vmax;
-  height: 100max;
+  height: 100;
   font-size: calc(1px + 1vmin);
 }
 
@@ -57,6 +63,7 @@ main {
 }
 
 #itunes{
+  width: 80vw;
   border-radius: 10px;
 }
 
