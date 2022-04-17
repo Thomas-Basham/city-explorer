@@ -54,9 +54,8 @@ main {
 }
 
 #map {
-  margin-top: 1vh;
   height: 100;
-  font-size: calc(1px + 1vmin);
+  font-size: calc(3px + 1vmin);
 }
 
 #mapImg{
