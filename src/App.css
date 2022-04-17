@@ -13,8 +13,9 @@ header {
 .navbar {
   padding: 1vmax;
   padding-inline: 2vmax;
+  padding-bottom: 3vmax;
   top: 0;
-  height: 60vh;
+  height: fit-content;
   width: 100%;
   transition: top 0.9s;
   z-index: 9;

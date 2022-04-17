@@ -5,9 +5,8 @@
   width: max-content;
   height: fit-content;
   padding: 1vmax;
-  padding-block: 2vmax;
   border-radius: 3px;
-  font-size: calc(3px + 1vmin);
+  font-size: calc(6px + 1vmin);
   text-align: center;
 }
 ul{
@@ -15,5 +14,4 @@ margin-inline: auto;
 }
 h6{
   font-size: calc(4px + 2vmin);
-
 }
