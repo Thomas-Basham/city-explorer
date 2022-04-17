@@ -1,13 +1,31 @@
 #root {
-  align-items: center;
-  justify-content: space-between;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(10px + 2vmin);  
+  display: block;
+  
 }
 
 header {
   text-align: center;
+  width: 100%;
   padding-bottom: 2vh;
 }
+
+.navbar {
+  padding: 1vmax;
+  padding-inline: 2vmax;
+  top: 0;
+  height: 60vh;
+  width: 100%;
+  transition: top 0.9s;
+  z-index: 9;
+}
+
+.navbar--hidden {
+  transition: top 1s;
+
+  top: -100%;
+}
+
 .input-txt::placeholder {
   font-size: calc(2px + 1vmin);
 }
@@ -29,17 +47,29 @@ header {
   padding-block: auto;
 } */
 main {
-  margin-top: 25vh;
+  width: 100%;
+  margin-top: 10vh;
+
 }
 
 #map {
   margin-top: 1vh;
-  margin-left: 2vh;
-  width: 5vmax;
-  height: 12vmax;
+  height: 100;
   font-size: calc(1px + 1vmin);
+}
+
+#mapImg{
+  width: 100%;
+  height: 100%;
+}
+
+#itunes{
+  width: 80vw;
+  border-radius: 10px;
 }
 
 .tuneslist {
   font-size: calc(6px + 1vmin);
+  margin-left: 0 auto;
 }
+

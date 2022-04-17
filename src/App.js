@@ -5,6 +5,7 @@ import React from "react";
 import { Button, Card, ListGroup, Row, Col, Container } from "react-bootstrap";
 import Weather from "./Weather";
 import Movies from "./Movies";
+import Classnames from "classnames";
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +20,8 @@ class App extends React.Component {
       imgData: [],
       itunesData: [],
       songSelection: [],
+      prevScrollpos: window.pageYOffset,
+      visible: true
     };
   }
 
@@ -87,9 +90,9 @@ class App extends React.Component {
       console.log(error);
     }
   };
-  componentDidMount() {
-    this.getSongs();
-  }
+  // componentDidMount() {
+  //   this.getSongs();
+  // }
 
   postSong = async (newSong) => {
     try {
@@ -114,35 +117,57 @@ class App extends React.Component {
     console.log(newSong);
     this.postSong(newSong);
   };
+
+  // Adds an event listener when the component is mount.
+  componentDidMount() {
+    window.addEventListener("scroll", this.handleScroll);
+  }
+
+  // Remove the event listener when the component is unmount.
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+  }
+
+  // Hide or show the menu.
+  handleScroll = () => {
+    const { prevScrollpos } = this.state;
+
+    const currentScrollPos = window.pageYOffset;
+    const visible = prevScrollpos > currentScrollPos;
+
+    this.setState({
+      prevScrollpos: currentScrollPos,
+      visible
+    });
+  };
   render() {
-    console.log(this.state.songSelection);
+    
+    console.log(this.state.visible);
     let itunesList = this.state.itunesData.map((element, idx) => {
       return (
-        <Col className="h-100" key={idx} style={{ paddingTop: 15 }}>
+        <Col className="h-100" key={idx} style={{ paddingTop: 15, width: "fit-content" }}>
           <ul
-            className="w-100"
+            className="tuneslist"
             style={{
+              textAlign: "left",
               background: "grey",
               opacity: 0.8,
               borderRadius: 3,
-              padding: 1,
+              padding: 3,
               flexDirection: "row",
               listStyle: "none",
               height: "max-content",
             }}
           >
-            <li
-              className="tuneslist"
-              style={{ width: "fit-content", textAlign: "left" }}
-            >
+            <li>
               <strong> {element.trackName} </strong>
+            </li>
               <li
                 className="tuneslist"
                 style={{ width: "fit-content", height: "max-content" }}
               >
                 {element.artistName}
               </li>
-            </li>
           </ul>
         </Col>
       );
@@ -151,8 +176,7 @@ class App extends React.Component {
     let listItems = this.state.weatherData.map((element, idx) => {
       return (
         <ul
-          className="w-100"
-          style={{ listStyle: "none", marginTop: "1vmax", height: "1vmax" }}
+          style={{ listStyle: "none", textAlign: "center", marginInline: "auto", paddingInline: 0}}
           key={idx}
           type="disc"
         >
@@ -190,7 +214,6 @@ class App extends React.Component {
                 style={{ overflow: "auto" }}
                 variant="top"
                 src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`}
-                height="400vmax"
               />
             ) : (
               <Card.Img
@@ -211,7 +234,7 @@ class App extends React.Component {
     let imgCards = removeDoubles.map((element, idx) => {
       return (
         <img
-          style={{ width: 400, height: 250, padding: 20 }}
+          style={{ width: 300, height: 300, padding: 20 }}
           key={idx}
           alt={idx}
           src={element}
@@ -222,7 +245,9 @@ class App extends React.Component {
     console.log(this.state.itunesData);
     return (
       <>
-        <header className="bg-dark  text-white fixed-top row">
+        <header 
+        style={{position:"sticky"}}
+        className={ Classnames("navbar bg-dark  text-white", {"navbar--hidden ": !this.state.visible})} >
           {this.state.error || this.state.submitted ? (
             <p>{this.state.errorMessage}</p>
           ) : (
@@ -234,9 +259,9 @@ class App extends React.Component {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <img
+                    id="mapImg"
                     alt={this.state.cityData.display_name}
-                    width="70vw"
-                    src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10&size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}
+                    src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=8size=300x300&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}
                   />
                   <p style={{ marginBottom: 0 }}>
                     lat: {this.state.cityData.lat}
@@ -290,10 +315,11 @@ class App extends React.Component {
             <p>{this.state.errorMessage}</p>
           ) : (
             <Container
+              id="itunes"
               style={{
-                paddingTop: 30,
-                paddingRight: "max-content",
-                display: "flex",
+                margin: 0,
+                marginInline: "auto",
+                paddingTop: 20,
                 backgroundImage: `url(${this.state.imgData[3]})`,
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
@@ -305,7 +331,7 @@ class App extends React.Component {
               >
                 Song names containing {this.state.city}
               </h2>
-              <Row xs={1} s={2} md={4} className="h-100 w-100" style={{}}>
+              <Row xs={1} s={2} md={4} className="h-100">
                 {itunesList}
               </Row>
             </Container>
@@ -314,8 +340,10 @@ class App extends React.Component {
           {this.state.error || this.state.submitted ? (
             <p>{this.state.errorMessage}</p>
           ) : (
-            <Container>
-              <h2 style={{ textAlign: "center", marginTop: "20px" }}>
+            <Container 
+            style={{textAlign: "center"}}
+            >
+              <h2 style={{ textAlign: "center", marginTop: "20px", width: "80vw"}}>
                 {" "}
                 {this.state.city} images{" "}
               </h2>

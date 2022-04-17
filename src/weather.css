@@ -2,11 +2,18 @@
   list-style: none;
 }
 .weather {
-  width: 5vmax;
-  height: 12vmax;
-  padding: 4px;
+  width: max-content;
+  height: fit-content;
+  padding: 1vmax;
+  padding-block: 2vmax;
   border-radius: 3px;
-  font-size: calc(0.02px + 1vmin);
-  margin-top: 1vh;
-  margin-right: 3vh;
+  font-size: calc(3px + 1vmin);
+  text-align: center;
+}
+ul{
+margin-inline: auto;  
+}
+h6{
+  font-size: calc(4px + 2vmin);
+
 }
