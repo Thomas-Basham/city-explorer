@@ -3,7 +3,7 @@ import React, { Component } from "react";
 export default class ImSea extends Component {
   render() {
     const removeDoubles = [...new Set(this.props.imgData)];
-    const sliceArray = removeDoubles.slice(0,10)
+    const sliceArray = removeDoubles.slice(0,12)
     let imgCards = sliceArray.map((element, idx) => {
       return (
 
