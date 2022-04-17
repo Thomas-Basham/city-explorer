@@ -148,7 +148,6 @@ class App extends React.Component {
         <Col className="h-100" key={idx} style={{ paddingTop: 15, width: "fit-content" }}>
           <ul
             className="tuneslist"
-            className=""
             style={{
               textAlign: "left",
               background: "grey",
@@ -177,8 +176,7 @@ class App extends React.Component {
     let listItems = this.state.weatherData.map((element, idx) => {
       return (
         <ul
-          className="w-100"
-          style={{ listStyle: "none",  height: "1vmax" }}
+          style={{ listStyle: "none", textAlign: "center", marginInline: "auto", paddingInline: 0}}
           key={idx}
           type="disc"
         >
@@ -236,14 +234,14 @@ class App extends React.Component {
     let imgCards = removeDoubles.map((element, idx) => {
       return (
         <img
-          style={{ width: 400, height: 250, padding: 20 }}
+          style={{ width: 300, height: 300, padding: 20 }}
           key={idx}
           alt={idx}
           src={element}
         />
       );
     });
-    // bg-dark  text-white fixed-top row 
+
     console.log(this.state.itunesData);
     return (
       <>
@@ -319,7 +317,9 @@ class App extends React.Component {
             <Container
               id="itunes"
               style={{
-                paddingTop: 30,
+                margin: 0,
+                marginInline: "auto",
+                paddingTop: 20,
                 backgroundImage: `url(${this.state.imgData[3]})`,
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
@@ -340,8 +340,10 @@ class App extends React.Component {
           {this.state.error || this.state.submitted ? (
             <p>{this.state.errorMessage}</p>
           ) : (
-            <Container>
-              <h2 style={{ textAlign: "center", marginTop: "20px" }}>
+            <Container 
+            style={{textAlign: "center"}}
+            >
+              <h2 style={{ textAlign: "center", marginTop: "20px", width: "80vw"}}>
                 {" "}
                 {this.state.city} images{" "}
               </h2>

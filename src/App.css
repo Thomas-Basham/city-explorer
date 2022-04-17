@@ -1,15 +1,18 @@
 #root {
   font-size: calc(10px + 2vmin);  
   display: block;
+  
 }
 
 header {
   text-align: center;
+  width: 100%;
   padding-bottom: 2vh;
 }
 
 .navbar {
-  padding: 10px;
+  padding: 1vmax;
+  padding-inline: 2vmax;
   top: 0;
   height: 60vh;
   width: 100%;
@@ -44,15 +47,13 @@ header {
   padding-block: auto;
 } */
 main {
-  width: fit-content;
+  width: 100%;
   margin-top: 10vh;
-  margin-inline: auto;
 
 }
 
 #map {
   margin-top: 1vh;
-  margin-left: 2vh;
   height: 100;
   font-size: calc(1px + 1vmin);
 }

@@ -14,6 +14,7 @@ class Weather extends React.Component {
               backgroundImage: `url(${this.props.imgData[0]})`,
               backgroundSize: "cover",
               textAlign: "center",
+              marginInline: "auto"
             }}
           >
             <h6>Current weather forecast for {this.props.city}</h6>
