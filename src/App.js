@@ -2,26 +2,31 @@ import "./App.css";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
-import { Button, Card, ListGroup, Row, Col, Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import Weather from "./Weather";
 import Movies from "./Movies";
 import Classnames from "classnames";
+import Itunes from "./Itunes";
+import ImSea from "./ImSea";
+import LocationIQ from "./LocationIQ";
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      city: "",
+      submitted: true,
+
       cityData: {},
       weatherData: [],
-      error: false,
-      errorMessage: "",
-      city: "",
       movieData: [],
-      submitted: true,
       imgData: [],
       itunesData: [],
-      songSelection: [],
+
+      error: false,
+      errorMessage: "",
+
       prevScrollpos: window.pageYOffset,
-      visible: true
+      visible: true,
     };
   }
 
@@ -79,44 +84,6 @@ class App extends React.Component {
       </div>
     );
   };
-  getSongs = async () => {
-    try {
-      let url = `${process.env.REACT_APP_SERVER}/song`;
-      let songs = await axios.get(url);
-      this.setState({
-        songSelection: songs.data,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // componentDidMount() {
-  //   this.getSongs();
-  // }
-
-  postSong = async (newSong) => {
-    try {
-      let url = `${process.env.REACT_APP_SERVER}/song`;
-      let createdSong = await axios.post(url, newSong);
-      this.setState({
-        songSelection: [...this.state.songSelection, createdSong.data],
-      });
-    } catch (error) {
-      console.log("we have an error:", error.response.data);
-    }
-  };
-
-  handleAddSong = (e) => {
-    e.preventDefault();
-    let newSong = {
-      artist: this.state.itunesData[0].artistName,
-      track: this.state.itunesData[0].trackName,
-      artwork: this.state.itunesData[0].artWork,
-      email: "bashamtg@gmail.com",
-    };
-    console.log(newSong);
-    this.postSong(newSong);
-  };
 
   // Adds an event listener when the component is mount.
   componentDidMount() {
@@ -137,149 +104,34 @@ class App extends React.Component {
 
     this.setState({
       prevScrollpos: currentScrollPos,
-      visible
+      visible,
     });
   };
   render() {
-    
-    console.log(this.state.visible);
-    let itunesList = this.state.itunesData.map((element, idx) => {
-      return (
-        <Col className="h-100" key={idx} style={{ paddingTop: 15, width: "fit-content" }}>
-          <ul
-            className="tuneslist"
-            style={{
-              textAlign: "left",
-              background: "grey",
-              opacity: 0.8,
-              borderRadius: 3,
-              padding: 3,
-              flexDirection: "row",
-              listStyle: "none",
-              height: "max-content",
-            }}
-          >
-            <li>
-              <strong> {element.trackName} </strong>
-            </li>
-              <li
-                className="tuneslist"
-                style={{ width: "fit-content", height: "max-content" }}
-              >
-                {element.artistName}
-              </li>
-          </ul>
-        </Col>
-      );
-    });
-
-    let listItems = this.state.weatherData.map((element, idx) => {
-      return (
-        <ul
-          style={{ listStyle: "none", textAlign: "center", marginInline: "auto", paddingInline: 0}}
-          key={idx}
-          type="disc"
-        >
-          <li
-            style={{
-              fontWeight: "bold",
-              color: "red",
-            }}
-          >
-            {element.date}
-          </li>
-
-          <li>{element.description}</li>
-        </ul>
-      );
-    });
-
-    let listItemsMovies = this.state.movieData.map((element, idx) => {
-      return (
-        <Col className="h-100" key={idx}>
-          <Card
-            className="card text-center h-100"
-            style={{
-              width: "auto",
-              height: "50vh",
-              padding: "10px",
-              margin: "2rem",
-            }}
-          >
-            <Card.Title style={{ height: "50px", overflow: "auto" }}>
-              {element.title}
-            </Card.Title>
-            {element.posterPath ? (
-              <Card.Img
-                style={{ overflow: "auto" }}
-                variant="top"
-                src={`https://image.tmdb.org/t/p/w500/${element.posterPath}`}
-              />
-            ) : (
-              <Card.Img
-                variant="top"
-                src="https://dummyimage.com/300x600.jpg?text=No%20Image%20Found"
-                alt="image not available"
-                height="400vmax"
-              />
-            )}
-            <Card.Footer style={{ height: "53px", overflow: "auto" }}>
-              {element.released}
-            </Card.Footer>
-          </Card>
-        </Col>
-      );
-    });
-    
-    const removeDoubles = [...new Set(this.state.imgData)];
-    let imgCards = removeDoubles.map((element, idx) => {
-      return (
-        <img
-          style={{ width: 300, height: 300, padding: 20, borderRadius: "10px" }}
-          key={idx}
-          alt={idx}
-          src={element}
-        />
-      );
-    });
-
-    console.log(this.state.itunesData);
     return (
       <>
-        <header 
-        style={{position:"sticky"}}
-        className={ Classnames("navbar bg-dark  text-white", {"navbar--hidden ": !this.state.visible})} >
-          {this.state.error || this.state.submitted ? (
-            <p>{this.state.errorMessage}</p>
-          ) : (
-            <div className="col" id="map">
-              <ListGroup>
-                <ListGroup.Item>
-                  {" "}
-                  {this.state.cityData.display_name}{" "}
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <img
-                    id="mapImg"
-                    alt={this.state.cityData.display_name}
-                    src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=3size=400x400&format=<format>&maptype=<MapType>&markers=icon:<icon>|${this.state.cityData.lat},${this.state.cityData.lon}&markers=icon:<icon>|<latitude>,<longitude>`}
-                  />
-                  <p style={{ marginBottom: 0 }}>
-                    lat: {this.state.cityData.lat}
-                  </p>
-                  <p style={{ marginBottom: 0 }}>
-                    lon: {this.state.cityData.lon}
-                  </p>
-                </ListGroup.Item>
-              </ListGroup>
-            </div>
-          )}
+        <header
+          style={{ position: "sticky" }}
+          className={Classnames("navbar bg-dark  text-white", {
+            "navbar--hidden ": !this.state.visible,
+          })}
+        >
+          <LocationIQ
+            city={this.state.city}
+            submitted={this.state.submitted}
+            error={this.state.error}
+            errorMessage={this.state.errorMessage}
+            cityData={this.state.cityData}
+          />
+
           <div className="col">
-            {this.state.submitted === true ? (
+            {this.state.submitted === true 
+            ? (
               <h2 style={{ textAlign: "center", marginTop: "40px" }}>
                 Welcome to City Explorer! {this.city}
               </h2>
-            ) : (
+            ) 
+            : (
               ""
             )}
 
@@ -303,7 +155,6 @@ class App extends React.Component {
             imgData={this.state.imgData}
             city={this.state.city}
             submitted={this.state.submitted}
-            listItems={listItems}
             weatherData={this.state.weatherData}
             error={this.state.error}
             errorMessage={this.state.errorMessage}
@@ -312,53 +163,45 @@ class App extends React.Component {
         </header>
 
         <main>
-          {this.state.error || this.state.submitted ? (
-            <p>{this.state.errorMessage}</p>
-          ) : (
-            <Container
-              id="itunes"
-              style={{
-                margin: 0,
-                marginInline: "auto",
-                paddingTop: 20,
-                backgroundImage: `url(${this.state.imgData[3]})`,
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-                textAlign: "center",
-              }}
-            >
-              <h2
-                style={{ padding: 15, textAlign: "center", marginTop: "4vh" }}
-              >
-                Song names containing {this.state.city}
-              </h2>
-              <Row xs={1} s={2} md={4} className="h-100">
-                {itunesList}
-              </Row>
-            </Container>
-          )}
+          <Container
+            id="itunes"
+            style={{
+              margin: 0,
+              marginInline: "auto",
+              paddingTop: 20,
+              backgroundImage: `url(${this.state.imgData[3]})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              textAlign: "center",
+            }}
+          >
+            <Itunes
+              itunesData={this.state.itunesData}
+              city={this.state.city}
+              submitted={this.state.submitted}
+              error={this.state.error}
+              errorMessage={this.state.errorMessage}
+            />
+          </Container>
 
-          {this.state.error || this.state.submitted ? (
-            <p>{this.state.errorMessage}</p>
-          ) : (
-            <Container 
-            style={{textAlign: "center"}}
-            >
-              <h2 style={{ textAlign: "center", marginTop: "20px", width: "80vw"}}>
-                {" "}
-                {this.state.city} images{" "}
-              </h2>
-              {imgCards}
-            </Container>
-          )}
+          <Container style={{ textAlign: "center" }}>
+            <ImSea
+              imgData={this.state.imgData}
+              city={this.state.city}
+              submitted={this.state.submitted}
+              error={this.state.error}
+              errorMessage={this.state.errorMessage}
+            />
+          </Container>
+
           <Container>
             <Movies
+              movieData={this.state.movieData}
               city={this.state.city}
               submitted={this.state.submitted}
               error={this.state.error}
               errorMessage={this.state.errorMessage}
               getCityData={this.getCityData}
-              listItemsMovies={listItemsMovies}
             />
           </Container>
         </main>

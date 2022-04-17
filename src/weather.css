@@ -1,5 +1,6 @@
 .list-group:last-child {
   list-style: none;
+  margin-bottom: 0;
 }
 .weather {
   width: max-content;

@@ -3,6 +3,32 @@ import "./weather.css";
 
 class Weather extends React.Component {
   render() {
+    let listItems = this.props.weatherData.map((element, idx) => {
+      return (
+        <ul
+          style={{
+            listStyle: "none",
+            textAlign: "center",
+            marginInline: "auto",
+            paddingInline: 0,
+            marginBottom: 0
+          }}
+          key={idx}
+          type="disc"
+        >
+          <li
+            style={{
+              fontWeight: "bold",
+              color: "red",
+            }}
+          >
+            {element.date}
+          </li>
+
+          <li>{element.description}</li>
+        </ul>
+      );
+    });
     return (
       <>
         {this.props.error || this.props.submitted ? (
@@ -19,7 +45,7 @@ class Weather extends React.Component {
           >
             <h6>Current weather forecast for {this.props.city}</h6>
 
-            {this.props.listItems}
+            {listItems}
           </div>
         )}
       </>
