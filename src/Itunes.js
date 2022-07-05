@@ -41,7 +41,7 @@ export default class Itunes extends Component {
 
     return (
       <>
-        {this.props.error || this.props.submitted ? (
+        {this.props.error || this.props.itunesData.length < 1 ? (
           <p>{this.props.errorMessage}</p>
         ) : (
           <>

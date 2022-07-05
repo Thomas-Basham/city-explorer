@@ -4,7 +4,7 @@ export default class LocationIQ extends Component {
   render() {
     return (
       <>
-        {this.props.error || this.props.submitted ? (
+        {this.props.error || !this.props.cityData.display_name ? (
           <p>{this.props.errorMessage}</p>
         ) : (
           <div className="col" id="map">

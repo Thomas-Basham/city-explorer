@@ -3,6 +3,7 @@ import { Row, Col, Card } from "react-bootstrap";
 
 class Movies extends React.Component {
   render() {
+    console.log(this.props.movieData.length)
     let slicedArray = this.props.movieData.slice(0,20)
     let listItemsMovies = slicedArray.map((element, idx) => {
       return (
@@ -43,7 +44,7 @@ class Movies extends React.Component {
     });
     return (
       <>
-        {this.props.error || this.props.submitted ? (
+        {this.props.error || this.props.movieData.length < 1 ? (
           <p>{this.props.errorMessage} </p>
         ) : (
           <>

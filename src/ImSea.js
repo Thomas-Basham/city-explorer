@@ -20,7 +20,7 @@ export default class ImSea extends Component {
     });
     return (
       <>
-        {this.props.error || this.props.submitted ? (
+        {this.props.error || this.props.imgData.length < 1 ? (
           <p>{this.props.errorMessage}</p>
         ) : (
           <>

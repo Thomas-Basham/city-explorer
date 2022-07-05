@@ -9,7 +9,8 @@ import Classnames from "classnames";
 import Itunes from "./Itunes";
 import ImSea from "./ImSea";
 import LocationIQ from "./LocationIQ";
-import GithubCorner from 'react-github-corner';
+import GithubCorner from "react-github-corner";
+import loading from "./loading.gif"
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -44,6 +45,15 @@ class App extends React.Component {
   // Get Data from Server API's
   getCityData = async (e) => {
     e.preventDefault();
+          // Trigger Submit
+          this.setState({ 
+            submitted: false,
+            cityData: {},
+            weatherData: [],
+            movieData: [],
+            imgData: [],
+            itunesData: [],
+          });
     try {
       // IMDB API
       let movieData = await axios.get(
@@ -71,8 +81,7 @@ class App extends React.Component {
       );
       this.setState({ cityData: cityData.data[0] }); // .data is built into axios
 
-      // Trigger Submit
-      this.setState({ submitted: false });
+
     } catch (error) {
       this.setState({
         error: true,
@@ -81,6 +90,12 @@ class App extends React.Component {
     }
   };
 
+  loadingMessage = () => {
+    if (!this.state.cityData.display_name
+       && this.state.submitted === false){
+      return <Container style={{textAlign: "center"}}><img alt="loading gif" src={loading} /></Container>
+    }
+  }
   // Hide or show the menu.
   handleScroll = () => {
     const { prevScrollpos } = this.state;
@@ -114,7 +129,12 @@ class App extends React.Component {
             "navbar--hidden ": !this.state.visible,
           })}
         >
-          <GithubCorner href="https://github.com/bashamtg/city-explorer" direction="left" size= '75' style={{zIndex:"10"}} />
+          <GithubCorner
+            href="https://github.com/bashamtg/city-explorer"
+            direction="left"
+            size="75"
+            style={{ zIndex: "10" }}
+          />
           <LocationIQ
             city={this.state.city}
             submitted={this.state.submitted}
@@ -160,6 +180,7 @@ class App extends React.Component {
         </header>
 
         <main>
+          {this.loadingMessage()}
           <Container
             id="itunes"
             style={{
