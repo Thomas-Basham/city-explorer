@@ -3,7 +3,7 @@
 **Author**: Thomas Basham
 **Version**: 3.0.0
 
-[Deployed Link](https://city-explorer-thomas-basham.netlify.app/)
+[city-explorer-thomas-basham.netlify.app](https://city-explorer-thomas-basham.netlify.app/)
 
 ## Overview
 
