@@ -2,19 +2,27 @@ import React, { Component } from "react";
 
 export default class ImSea extends Component {
   render() {
-    const removeDoubles = [...new Set(this.props.imgData)];
-    const sliceArray = removeDoubles.slice(0,12)
-    let imgCards = sliceArray.map((element, idx) => {
+    // const removeDoubles = [...new Set(this.props.imgData)];
+    // const sliceArray = removeDoubles.slice(0,12)
+    let imgCards = this.props.imgData.map((element, idx) => {
       return (
-
-        <a className="col" key={idx} href={element} target="_blank" rel="noopener noreferrer">
-        <img
-
-          style={{ width: 320, height: 210, padding: 20, borderRadius: "10px" }}
-          
-          alt={idx}
-          src={element}
-        />
+        <a
+          className="col"
+          key={idx}
+          href={element}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            style={{
+              width: 320,
+              height: 210,
+              padding: 20,
+              borderRadius: "10px",
+            }}
+            alt={idx}
+            src={element}
+          />
         </a>
       );
     });

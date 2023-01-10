@@ -10,7 +10,7 @@ import Itunes from "./Itunes";
 import ImSea from "./ImSea";
 import LocationIQ from "./LocationIQ";
 import GithubCorner from "react-github-corner";
-import loading from "./loading.gif"
+import loading from "./loading.gif";
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -45,15 +45,15 @@ class App extends React.Component {
   // Get Data from Server API's
   getCityData = async (e) => {
     e.preventDefault();
-          // Trigger Submit
-          this.setState({ 
-            submitted: false,
-            cityData: {},
-            weatherData: [],
-            movieData: [],
-            imgData: [],
-            itunesData: [],
-          });
+    // Trigger Submit
+    this.setState({
+      submitted: false,
+      cityData: {},
+      weatherData: [],
+      movieData: [],
+      imgData: [],
+      itunesData: [],
+    });
     try {
       // IMDB API
       let movieData = await axios.get(
@@ -64,7 +64,7 @@ class App extends React.Component {
       let imgData = await axios.get(
         `${process.env.REACT_APP_SERVER}/imsea?q=${this.state.city}`
       );
-      this.setState({ imgData: imgData.data[0] }); // .data is built into axios
+      this.setState({ imgData: imgData.data }); // .data is built into axios
       // Itunes API
       let itunesData = await axios.get(
         `${process.env.REACT_APP_SERVER}/itunes?term=${this.state.city}`
@@ -80,8 +80,6 @@ class App extends React.Component {
         `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`
       );
       this.setState({ cityData: cityData.data[0] }); // .data is built into axios
-
-
     } catch (error) {
       this.setState({
         error: true,
@@ -91,11 +89,14 @@ class App extends React.Component {
   };
 
   loadingMessage = () => {
-    if (!this.state.cityData.display_name
-       && this.state.submitted === false){
-      return <Container style={{textAlign: "center"}}><img alt="loading gif" src={loading} /></Container>
+    if (!this.state.cityData.display_name && this.state.submitted === false) {
+      return (
+        <Container style={{ textAlign: "center" }}>
+          <img alt="loading gif" src={loading} />
+        </Container>
+      );
     }
-  }
+  };
   // Hide or show the menu.
   handleScroll = () => {
     const { prevScrollpos } = this.state;

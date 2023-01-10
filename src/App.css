@@ -1,7 +1,7 @@
 #root {
-  font-size: calc(10px + 2vmin);  
+  font-size: calc(10px + 2vmin);
   display: block;
-  
+
 }
 
 header {
@@ -30,6 +30,7 @@ header {
 .input-txt::placeholder {
   font-size: calc(2px + 1vmin);
 }
+
 .input-txt {
   margin: 1em;
   padding-inline: 1vw;
@@ -58,12 +59,12 @@ main {
   font-size: calc(3px + 1vmin);
 }
 
-#mapImg{
+#mapImg {
   width: 100%;
   height: 90%;
 }
 
-#itunes{
+#itunes {
   width: 80vw;
   border-radius: 10px;
 }
@@ -72,4 +73,3 @@ main {
   font-size: calc(6px + 1vmin);
   margin-left: 0 auto;
 }
-

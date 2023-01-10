@@ -31,7 +31,7 @@ class Weather extends React.Component {
     });
     return (
       <>
-        {this.props.error || this.props.weatherData.length < 1  ? (
+        {this.props.error || this.props.weatherData.length < 1 ? (
           <p>{this.props.errorMessage}</p>
         ) : (
           <div
